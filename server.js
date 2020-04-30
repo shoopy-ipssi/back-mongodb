@@ -9,8 +9,9 @@ const app = express();
 const db = "mongodb+srv://ShoopyApi:obKmRLS3UEF9rTR4@shoopy-4r2ms.gcp.mongodb.net/shoopy?retryWrites=true&w=majority";
 
 
+
 // set port (localhost:<port>)
-const port = 8000;
+const port = process.env.PORT || 3000;
 
 app.use(bodyParser.urlencoded({extended: true}))
 
@@ -26,7 +27,7 @@ const datab = client.db('shoopy')
 if (err) return console.log(err)
 require('./app/routes')(app, datab);
 app.listen(port, () =>{
-    console.log('Ok Mr.'+ port)
+    console.log('Shoopy is on the port '+ port)
 })
 /*    if (err) return console.log(err)
     require('./app/routes')(app, db);
