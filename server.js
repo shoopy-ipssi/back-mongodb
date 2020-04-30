@@ -1,4 +1,4 @@
-g// Config server Mongodb
+// Config server Mongodb
 // MongoClient doc https://mongodb.github.io/node-mongodb-native/api-generated/mongoclient.html
 
 const express = require('express');
