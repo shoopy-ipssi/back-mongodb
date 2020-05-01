@@ -14,7 +14,12 @@ const db = "mongodb+srv://ShoopyApi:obKmRLS3UEF9rTR4@shoopy-4r2ms.gcp.mongodb.ne
 const port = process.env.PORT || 3000;
 
 app.use(bodyParser.urlencoded({extended: true}))
-
+app.use(function (req, res, next) {
+    res.header("Access-Control-Allow-Origin", "*"); // update to match the domain you will make the request from
+    res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
+    res.header("Access-Control-Allow-Methods", "GET, PUT, POST, DELETE, HEAD")
+    next();
+});
 // npm install mongodb --save
 // MongoClient.connect(url) deprecate from new version, use MongoClient.connect(url, { useNewUrlParser: true, useUnifiedTopology: true })
 // db.collection error, use client.db(<dbname>)
