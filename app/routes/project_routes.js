@@ -93,4 +93,24 @@ module.exports = function (app, db) {
 
     })
 
+
+    app.delete('/scenario/delete/:id', (req, res) => {
+        let send = "";
+        actionId =  req.params.id
+        const idAction = {'_id': new ObjectId(actionId)};
+        const deleteParentChildren = {$pull: {parents: ObjectId(actionId), childrens: ObjectId(actionId)}};
+
+        db.collection('scenario').update({}, deleteParentChildren, {multi: true});
+
+        db.collection('scenario').deleteOne(idAction, (err, item) => {
+            if (err) {
+                send = {'error': 'An error has occured'};
+            } else {
+                send += "Shoopy delete action";
+            }
+        })
+        res.send(send)
+
+    })
+
 }
