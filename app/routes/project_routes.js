@@ -38,8 +38,9 @@ module.exports = function (app, db) {
             }
         })
     })
-    app.patch('/scenario/connect', (req, res) => {
+    app.put('/scenario/connect', (req, res) => {
         let parentChildren = "";
+        let send = "";
         parentChildren = req.body;
         console.log(parentChildren)
 
@@ -50,19 +51,46 @@ module.exports = function (app, db) {
 
         db.collection('scenario').updateOne(detailParent, {$push: {"childrens": new ObjectId(parentChildren.idChildren)}}, (err, item) => {
             if (err) {
-                res.send({'error': 'An error has occured'});
+                send = {'error': 'An error has occured'};
+            } else {
+                send = "parent good";
             }
         })
         db.collection('scenario').updateOne(detailChildren, {$push: {"parents": new ObjectId(parentChildren.idParent)}}, (err, item) => {
             if (err) {
-                res.send({'error': 'An error has occured'});
+                send = {'error': 'An error has occured'};
             } else {
-                res.send("Parents and Children good")
+                send += "\nchildren good";
             }
         })
-
+        res.send(send)
 
     })
+    app.put('/scenario/modify', (req, res) => {
+        let send = "";
+        action = req.body;
+        const idAction = {'_id': new ObjectId(action.id)};
+        const updateAction = {
+            $set:
+                {
+                    "scenario_id": action.scenario_id,
+                    "action": action.action,
+                    "text": action.text,
+                    "parents": action.parents,
+                    "childrens": action.childrens
+                }
+        }
 
+
+        db.collection('scenario').updateOne(idAction, updateAction, (err, item) => {
+            if (err) {
+                send = {'error': 'An error has occured'};
+            } else {
+                send += "Shoopy is Update";
+            }
+        })
+        res.send(send)
+
+    })
 
 }
